@@ -177,13 +177,13 @@ def tutorial_5_visualization_deep_dive():
     # Visualization 1: Results comparison
     print("\n1. Creating quantum vs classical comparison plot...")
     grover.plot_results(quantum_result, classical_result, 
-                       save_path='/home/claude/tutorial_results_comparison.png')
+                       save_path='tutorial_results_comparison.png')
     
     # Visualization 2: Probability amplification
     print("2. Analyzing probability amplification...")
     analysis = grover.analyze_iterations(max_iterations=8, shots=1024)
     grover.plot_probability_amplification(analysis,
-                                         save_path='/home/claude/tutorial_amplification.png')
+                                         save_path='tutorial_amplification.png')
     
     print("\n✓ All visualizations saved!")
     print("\nVisualization Guide:")
