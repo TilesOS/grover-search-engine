@@ -98,7 +98,7 @@ where θ = arcsin(√(M/N))
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/yourusername/grover-search-engine.git
+git clone https://github.com/TilesOS/grover-search-engine.git
 cd grover-search-engine
 ```
 
@@ -419,7 +419,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 ### Development Setup
 
 ```bash
-git clone https://github.com/yourusername/grover-search-engine.git
+git clone https://github.com/TilesOS/grover-search-engine.git
 cd grover-search-engine
 python -m venv venv
 source venv/bin/activate
