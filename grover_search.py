@@ -468,7 +468,7 @@ def main():
     
     # Plot results
     grover1.plot_results(quantum_result1, classical_result1, 
-                        save_path='/home/claude/grover_single_state.png')
+                        save_path='grover_single_state.png')
     
     # Example 2: Multiple marked states
     print("\n\n--- Example 2: Multiple marked states ---")
@@ -479,13 +479,13 @@ def main():
     
     grover2.print_summary(quantum_result2, classical_result2)
     grover2.plot_results(quantum_result2, classical_result2,
-                        save_path='/home/claude/grover_multiple_states.png')
+                        save_path='grover_multiple_states.png')
     
     # Example 3: Probability amplification analysis
     print("\n\n--- Example 3: Probability amplification ---")
     analysis_data = grover2.analyze_iterations(max_iterations=12, shots=1024)
     grover2.plot_probability_amplification(analysis_data,
-                                          save_path='/home/claude/probability_amplification.png')
+                                          save_path='probability_amplification.png')
 
 
 if __name__ == "__main__":
