@@ -5,7 +5,7 @@ Test suite for GroverSearchEngine.
 
 import numpy as np
 import pytest
-from grover_search_engine import GroverSearchEngine
+from grover_search import GroverSearchEngine
 
 
 class TestBasicFunctionality:
