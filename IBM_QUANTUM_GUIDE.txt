@@ -1,0 +1,132 @@
+# IBM Quantum Computer Guide
+
+## Running Grover's Algorithm on Real Quantum Hardware
+
+This guide explains how to modify the code to run on actual IBM quantum computers instead of simulators.
+
+## Prerequisites
+
+1. **IBM Quantum Account**: Sign up at https://quantum-computing.ibm.com/
+2. **API Token**: Get your personal API token from the IBM Quantum account settings
+3. **Install Required Packages**:
+   ```bash
+   pip install qiskit-ibm-runtime
+   ```
+
+## Key Differences: Simulator vs Real Hardware
+
+### Simulator (Current Setup)
+- Uses `qiskit_aer.Aer` simulator
+- Fast execution (milliseconds)
+- No noise, perfect results
+- Unlimited qubits (within memory limits)
+
+### Real Quantum Computer
+- Uses actual quantum hardware
+- Slower execution (minutes to hours due to queue)
+- Affected by noise and decoherence
+- Limited qubit count (typically 5-127)
+- Free tier has usage limits
+
+## Code Modifications Required
+
+### Step 1: Update Imports
+```python
+# Replace simulator import with:
+from qiskit_ibm_runtime import QiskitRuntimeService, Sampler
+```
+
+### Step 2: Configure Backend Selection
+```python
+# Initialize IBM Quantum service
+service = QiskitRuntimeService(
+    channel="ibm_quantum",
+    token="YOUR_API_TOKEN_HERE"
+)
+
+# Get the least busy available quantum computer
+backend = service.least_busy_backend()
+```
+
+### Step 3: Modify Circuit Execution
+```python
+# Replace Aer simulator with real backend
+sampler = Sampler(backend)  # Use real hardware instead of simulator
+result = sampler.run(circuit).result()
+counts = result.quasi_dists[0]
+```
+
+## Important Considerations
+
+### 1. Job Queueing
+- Real devices have queue waits (minutes to hours)
+- Multiple jobs may be ahead of yours
+- Use `backend.status()` to check queue status
+
+### 2. Error Handling
+- Add retry logic for failed shots
+- Handle job cancellation due to timeouts
+- Monitor quantum circuit execution
+
+### 3. Noise and Decoherence
+- Expect lower success probabilities
+- Results may vary between runs
+- More iterations may be needed
+
+### 4. Cost and Limits
+- Free tier has credit limits
+- Monitor your usage in IBM Quantum account
+- Consider using smaller circuits for testing
+
+## Monitoring Your Jobs
+
+```python
+# Check job status
+from qiskit_ibm_runtime import IbmBackend
+backend = IbmBackend.load_from_cloud_config()
+jobs = backend.jobs(limit=5)  # Get last 5 jobs
+for job in jobs:
+    print(f"Job ID: {job.job_id}, Status: {job.status()}")
+```
+
+## Best Practices
+
+1. **Start small**: Test with 2-3 qubit circuits first
+2. **Use transpiler optimizations**: Let IBM's transpiler optimize your circuit
+3. **Monitor results**: Compare multiple runs to account for noise
+4. **Check backend status**: Use `backend.status()` before submitting jobs
+5. **Set realistic expectations**: Noise is part of quantum computing!
+
+## Troubleshooting
+
+### Common Issues:
+- **Authentication errors**: Verify your API token
+- **Backend not available**: Try a different backend or wait for maintenance
+- **Job failed**: Check error messages, may need to simplify circuit
+- **Timeout errors**: Reduce circuit depth or use more robust gates
+
+### Help Resources:
+- IBM Quantum Documentation: https://docs.quantum-computing.ibm.com/
+- Qiskit Textbook: https://learn.qiskit.org/
+- IBM Quantum Support: Available through your account dashboard
+
+## Example Modified Code Snippet
+
+```python
+from qiskit_ibm_runtime import QiskitRuntimeService, Sampler
+
+# Initialize service with your token
+service = QiskitRuntimeService(channel="ibm_quantum", token="YOUR_TOKEN")
+
+# Get backend (try different ones if preferred is busy)
+backend = service.least_busy_backend(simulator=False)  # False excludes simulators
+
+# Create and run circuit
+sampler = Sampler(backend)
+result = sampler.run(circuit).result()
+counts = result.quasi_dists[0]
+```
+
+---
+
+For more information, consult the official IBM Quantum documentation and Qiskit tutorials.
