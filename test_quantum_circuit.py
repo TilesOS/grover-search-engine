@@ -3,8 +3,8 @@ Test script to verify Grover's algorithm implementation
 before running on real IBM Quantum hardware.
 """
 
-from qiskit import QuantumCircuit, execute
-from qiskit_aer import Aer
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator  # Fixed: Changed from qiskit.aer to qiskit_aer
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
 
@@ -36,7 +36,10 @@ def grovers_algorithm(search_space):
     # Apply X gate to target qubits to mark the state
     qc.x(target_index)
     qc.h(qubits_needed - 1)  # Apply Hadamard to last qubit for phase flip
-    qc.ccx(0, 1, qubits_needed - 1) if qubits_needed > 2 else None  # Controlled-NOT
+    if qubits_needed > 2:
+        qc.ccx(0, 1, qubits_needed - 1)  # Controlled-NOT
+    else:
+        qc.cx(target_index, qubits_needed - 1)
     qc.h(qubits_needed - 1)
     qc.x(target_index)
 
@@ -69,8 +72,8 @@ def test_grover_algorithm():
     qc = grovers_algorithm(search_space)
 
     # Simulate the circuit
-    simulator = Aer.get_backend('qasm_simulator')
-    result = execute(qc, simulator, shots=1024).result()
+    simulator = AerSimulator()
+    result = simulator.run(qc, shots=1024).result()
     counts = result.get_counts(qc)
 
     print("\nMeasurement results:")
