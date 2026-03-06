@@ -1,4 +1,6 @@
-# Other
+# Ignore local settings and memory
+.claude/settings.local.json
+.claude/memory/
 .claude/
 
 # Byte-compiled / optimized / DLL files
